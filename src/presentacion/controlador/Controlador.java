@@ -4,7 +4,12 @@ import presentacion.vista.VentanaPrincipal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
+import javax.swing.DefaultListModel;
+
+import entidades.Persona;
+import negocio.PersonaNegocio;
 import presentacion.vista.PanelAgregarPersonas;
 import presentacion.vista.PanelModificarPersona;
 import presentacion.vista.PanelEliminarPersonas;
@@ -19,11 +24,16 @@ public class Controlador implements ActionListener{
 	private PanelEliminarPersonas pnlEliminarPersonas;
 	private PanelListarPersonas pnlListarPersonas;
 	
+	private PersonaNegocio pNegocio;
+	private ArrayList<Persona> tablaPersonas;
+	//private static DefaultListModel<Persona> dlmodel;
 	
-	public Controlador(VentanaPrincipal win)
+	
+	public Controlador(VentanaPrincipal win, PersonaNegocio pNegocio)
 	{
 		
 	this.ventanaPrincipal = win;	
+	this.pNegocio = pNegocio;
 	
 	this.pnlAgregarPersonas = new PanelAgregarPersonas();
 	this.pnlModificarPersona = new PanelModificarPersona();
@@ -35,7 +45,44 @@ public class Controlador implements ActionListener{
 	this.ventanaPrincipal.getMnModificar().addActionListener(a->EventoClickMenu_AbrirPanel_ModificarPersona(a));
 	this.ventanaPrincipal.getMnEliminar().addActionListener(a->EventoClickMenu_AbrirPanel_EliminarPersona(a));
 	this.ventanaPrincipal.getMnListar().addActionListener(a->EventoClickMenu_AbrirPanel_ListarPersonas(a));
-
+	
+	//Eventos PanelAgregarPersonas
+	
+	this.pnlAgregarPersonas.getBtnAgregarPersona().addActionListener(a-> EventoClick_AgregarPersonas(a));
+	
+	//Eventos PanelModificarPersona
+	
+	//Eventos PanelEliminarPersonas
+	
+	//Eventos PanelListarPersonas
+	
+	}
+	
+	private void EventoClick_AgregarPersonas(ActionEvent actEvent) {
+		
+		String dniPersona = this.pnlAgregarPersonas.getTxtDni().getText();
+		String nombrePersona = this.pnlAgregarPersonas.getTxtNombre().getText();
+		String apellidoPersona = this.pnlAgregarPersonas.getTxtApellido().getText();
+		
+		Persona nuevaPersona = new Persona(dniPersona, nombrePersona, apellidoPersona);
+		
+		int estadoInsert = pNegocio.insert(nuevaPersona);
+		String mensajeOutput = "La persona se agrego a la base de datos correctamente";
+		
+		if(estadoInsert == 1) {
+			pnlAgregarPersonas.limpiarTextFields();
+		}
+		else if (estadoInsert == 0){
+			mensajeOutput = "Error al agregar la persona, verifique los campos";
+		}
+		else if(estadoInsert == -1) {
+			mensajeOutput = "El DNI ya se encuentra registrado";
+		}
+	
+		// Se muestra el mensaje
+		this.pnlAgregarPersonas.mostrarMensaje(mensajeOutput);
+		this.actualizarTabla();
+		
 	}
 	
 	public void EventoClickMenu_AbrirPanel_AgregarPersona(ActionEvent a)
@@ -44,6 +91,8 @@ public class Controlador implements ActionListener{
 		ventanaPrincipal.getContentPane().add(pnlAgregarPersonas);
 		ventanaPrincipal.getContentPane().repaint();
 		ventanaPrincipal.getContentPane().revalidate();
+		
+		
 	}
 	public void EventoClickMenu_AbrirPanel_ModificarPersona(ActionEvent a)
 	{
@@ -71,6 +120,12 @@ public class Controlador implements ActionListener{
 	public void cambiarVisibilidad(boolean bool)
 	{
 		this.ventanaPrincipal.setVisible(bool);;
+	}
+
+
+	private void actualizarTabla() {
+		this.tablaPersonas = (ArrayList<Persona>) pNegocio.readAll();
+		
 	}
 
 	@Override

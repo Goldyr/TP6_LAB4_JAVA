@@ -6,8 +6,17 @@ import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class PanelAgregarPersonas extends JPanel {
 	
@@ -58,43 +67,118 @@ public class PanelAgregarPersonas extends JPanel {
 
 
 	public PanelAgregarPersonas() {
-		
-
-		setLayout(null);
+		GridBagLayout gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{56, 103, 33, 167, 0};
+		gridBagLayout.rowHeights = new int[]{14, 20, 33, 20, 33, 20, 33, 26, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		setLayout(gridBagLayout);
 		
 		JLabel lblNombre = new JLabel("Nombre");
-		lblNombre.setBounds(39, 41, 61, 14);
-		add(lblNombre);
+		GridBagConstraints gbc_lblNombre = new GridBagConstraints();
+		gbc_lblNombre.anchor = GridBagConstraints.WEST;
+		gbc_lblNombre.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNombre.gridx = 1;
+		gbc_lblNombre.gridy = 1;
+		add(lblNombre, gbc_lblNombre);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(167, 38, 162, 20);
-		add(txtNombre);
+		txtNombre.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if ((e.getKeyChar() >= '0' && e.getKeyChar() <= '9')) {
+				   	JOptionPane.showMessageDialog(null, "No ingreses numeros", "Error de formato", JOptionPane.WARNING_MESSAGE);
+				   	txtNombre.setText("");
+		        } 
+			}
+		});
+		GridBagConstraints gbc_txtNombre = new GridBagConstraints();
+		gbc_txtNombre.anchor = GridBagConstraints.NORTH;
+		gbc_txtNombre.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtNombre.insets = new Insets(0, 0, 5, 0);
+		gbc_txtNombre.gridx = 3;
+		gbc_txtNombre.gridy = 1;
+		add(txtNombre, gbc_txtNombre);
 		txtNombre.setColumns(10);
 		
 		JLabel lblApellido = new JLabel("Apellido");
-		lblApellido.setBounds(39, 94, 61, 14);
-		add(lblApellido);
+		GridBagConstraints gbc_lblApellido = new GridBagConstraints();
+		gbc_lblApellido.anchor = GridBagConstraints.WEST;
+		gbc_lblApellido.insets = new Insets(0, 0, 5, 5);
+		gbc_lblApellido.gridx = 1;
+		gbc_lblApellido.gridy = 3;
+		add(lblApellido, gbc_lblApellido);
 		
 		txtApellido = new JTextField();
-		txtApellido.setBounds(167, 91, 162, 20);
-		add(txtApellido);
+		txtApellido.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if ((e.getKeyChar() >= '0' && e.getKeyChar() <= '9')) {
+				   	JOptionPane.showMessageDialog(null, "No ingreses numeros", "Error de formato", JOptionPane.WARNING_MESSAGE);
+				   	txtApellido.setText("");
+		        } 
+			}
+		});
+		GridBagConstraints gbc_txtApellido = new GridBagConstraints();
+		gbc_txtApellido.anchor = GridBagConstraints.NORTH;
+		gbc_txtApellido.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtApellido.insets = new Insets(0, 0, 5, 0);
+		gbc_txtApellido.gridx = 3;
+		gbc_txtApellido.gridy = 3;
+		add(txtApellido, gbc_txtApellido);
 		txtApellido.setColumns(10);
 		
 		JLabel lblDni = new JLabel("DNI");
-		lblDni.setBounds(39, 147, 42, 14);
-		add(lblDni);
+		GridBagConstraints gbc_lblDni = new GridBagConstraints();
+		gbc_lblDni.anchor = GridBagConstraints.WEST;
+		gbc_lblDni.insets = new Insets(0, 0, 5, 5);
+		gbc_lblDni.gridx = 1;
+		gbc_lblDni.gridy = 5;
+		add(lblDni, gbc_lblDni);
 		
 		txtDni = new JTextField();
-		txtDni.setBounds(167, 144, 162, 20);
-		add(txtDni);
+		txtDni.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (!(e.getKeyChar() >= '0' && e.getKeyChar() <= '9')) {
+				   	JOptionPane.showMessageDialog(null, "Ingresa solo valores numericos", "Error de formato", JOptionPane.WARNING_MESSAGE);
+				   	txtDni.setText("");
+		        } 
+			}
+		});
+		GridBagConstraints gbc_txtDni = new GridBagConstraints();
+		gbc_txtDni.anchor = GridBagConstraints.NORTH;
+		gbc_txtDni.fill = GridBagConstraints.HORIZONTAL;
+		gbc_txtDni.insets = new Insets(0, 0, 5, 0);
+		gbc_txtDni.gridx = 3;
+		gbc_txtDni.gridy = 5;
+		add(txtDni, gbc_txtDni);
 		txtDni.setColumns(10);
 		
 		btnAgregarPersona = new JButton("Aceptar");
-		btnAgregarPersona.setBounds(63, 197, 71, 23);
-		add(btnAgregarPersona);
+		btnAgregarPersona.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GridBagConstraints gbc_btnAgregarPersona = new GridBagConstraints();
+		gbc_btnAgregarPersona.fill = GridBagConstraints.HORIZONTAL;
+		gbc_btnAgregarPersona.insets = new Insets(0, 0, 0, 5);
+		gbc_btnAgregarPersona.gridx = 1;
+		gbc_btnAgregarPersona.gridy = 7;
+		add(btnAgregarPersona, gbc_btnAgregarPersona);
 
 	}
 	
-
+	public void limpiarTextFields() {
+		this.txtApellido.setText("");
+		this.txtDni.setText("");
+		this.txtNombre.setText("");
+	}
+	
+	public void mostrarMensaje(String mensaje)
+	{
+		JOptionPane.showMessageDialog(null, mensaje);
+	}
 
 }
+

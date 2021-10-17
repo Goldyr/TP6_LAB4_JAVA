@@ -1,21 +1,32 @@
 package entidades;
 
-public class Persona {
+public class Persona implements Comparable<Persona>{
 	
-	private int dni;
+	@Override
+	public String toString() {
+		return "Persona [dni=" + dni + ", nombre=" + nombre + ", apellido=" + apellido + "]";
+	}
+
+	private String  dni;
 	private String nombre;
 	private String apellido;
 	
-	Persona()
+	public Persona()
 	{
 		
 	}
+	
+	public Persona(String dni, String nombre, String apellido) {
+		this.dni = dni;
+		this.nombre = nombre;
+		this.apellido = apellido;
+	}
 
-	public int getDni() {
+	public String getDni() {
 		return dni;
 	}
 
-	public void setDni(int dni) {
+	public void setDni(String dni) {
 		this.dni = dni;
 	}
 
@@ -33,6 +44,11 @@ public class Persona {
 
 	public void setApellido(String apellido) {
 		this.apellido = apellido;
+	}
+
+	@Override
+	public int compareTo(Persona personaCompare) {
+		return this.dni.compareTo(personaCompare.getDni());
 	}
 	
 	

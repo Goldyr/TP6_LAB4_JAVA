@@ -17,9 +17,7 @@ public class VentanaPrincipal extends JFrame {
 	private JMenuItem mnModificar;
 	private JMenuItem mnEliminar;
 	private JMenuItem mnListar;
-
-
-
+	
 	public VentanaPrincipal()
 	{
 
