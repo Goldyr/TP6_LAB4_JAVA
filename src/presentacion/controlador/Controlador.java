@@ -37,7 +37,7 @@ public class Controlador implements ActionListener{
 	
 	this.pnlAgregarPersonas = new PanelAgregarPersonas();
 	this.pnlModificarPersona = new PanelModificarPersona();
-	this.pnlEliminarPersonas = new PanelEliminarPersonas();
+	this.pnlEliminarPersonas = new PanelEliminarPersonas((ArrayList<Persona>) pNegocio.readAll());
 	this.pnlListarPersonas = new PanelListarPersonas();
 	
 	//Eventos menu del Frame principal llamado Ventana
@@ -53,6 +53,7 @@ public class Controlador implements ActionListener{
 	//Eventos PanelModificarPersona
 	
 	//Eventos PanelEliminarPersonas
+	this.pnlEliminarPersonas.getBtnEliminar().addActionListener(s->EventoClickBoton_BorrarPersona(s));
 	
 	//Eventos PanelListarPersonas
 	
@@ -75,13 +76,18 @@ public class Controlador implements ActionListener{
 		else if (estadoInsert == 0){
 			mensajeOutput = "Error al agregar la persona, verifique los campos";
 		}
-		else if(estadoInsert == -1) {
+		else if (estadoInsert == -1){
 			mensajeOutput = "El DNI ya se encuentra registrado";
 		}
 	
 		// Se muestra el mensaje
 		this.pnlAgregarPersonas.mostrarMensaje(mensajeOutput);
 		this.actualizarTabla();
+		
+	}
+	
+	private void EventoClickBoton_BorrarPersona(ActionEvent act) {
+		
 		
 	}
 	
@@ -104,9 +110,13 @@ public class Controlador implements ActionListener{
 	public void EventoClickMenu_AbrirPanel_EliminarPersona(ActionEvent a)
 	{
 		ventanaPrincipal.getContentPane().removeAll();
+		
 		ventanaPrincipal.getContentPane().add(pnlEliminarPersonas);
+		
 		ventanaPrincipal.getContentPane().repaint();
+		
 		ventanaPrincipal.getContentPane().revalidate();
+		this.actualizarTabla();
 	}
 	public void EventoClickMenu_AbrirPanel_ListarPersonas(ActionEvent a)
 	{
@@ -124,8 +134,9 @@ public class Controlador implements ActionListener{
 
 
 	private void actualizarTabla() {
-		this.tablaPersonas = (ArrayList<Persona>) pNegocio.readAll();
 		
+		this.tablaPersonas = (ArrayList<Persona>) pNegocio.readAll();
+		this.pnlEliminarPersonas.CargarList(tablaPersonas);
 	}
 
 	@Override

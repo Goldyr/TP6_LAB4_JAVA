@@ -27,7 +27,7 @@ public class PersonaNegocioImpl implements PersonaNegocio{
 			if(!verificarExistencia(pDao.readAll(), persona)) {
 				// Verifico si se puede insertar, si no un campo esta mal
 				if(pDao.insert(persona)) {
-					estadoInsert = 0;
+					estadoInsert = 1;
 				}
 			}
 			// Si existe, devuelve -1
