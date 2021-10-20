@@ -28,7 +28,7 @@ public class PersonaNegocioImpl implements PersonaNegocio{
 				// Verifico si se puede insertar, si no un campo esta mal
 				if(pDao.insert(persona)) {
 					estadoInsert = 1;
-				}
+				}else estadoInsert = -2; //si no se pudo insertar
 			}
 			// Si existe, devuelve -1
 			else {
@@ -41,6 +41,19 @@ public class PersonaNegocioImpl implements PersonaNegocio{
 		return estadoInsert;
 	}
 
+	
+	@Override
+	public int update(Persona persona_modificar) {
+		int estadoUpdate;
+		if(persona_modificar.getNombre().trim().length()>0 && persona_modificar.getApellido().trim().length()>0 && persona_modificar.getDni().trim().length()>0) {
+			if(pDao.update(persona_modificar)) {
+				estadoUpdate = 1; // si se pudo hacer el update devuelve 1
+			}else estadoUpdate=-1; //si no se pudo hacer devuelve -1
+		}else estadoUpdate =0; //si un campo esta vacio devuelve 0
+		// TODO Auto-generated method stub
+		return estadoUpdate;
+	}
+	
 	private boolean verificarExistencia(List<Persona> listPersona, Persona persona_a_comparar) {
 		
 		boolean existe = false;
@@ -68,5 +81,7 @@ public class PersonaNegocioImpl implements PersonaNegocio{
 	public List<Persona> readAll() {
 		return pDao.readAll();
 	}
+
+
 
 }

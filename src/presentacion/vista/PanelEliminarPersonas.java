@@ -20,7 +20,7 @@ public class PanelEliminarPersonas extends JPanel {
 	private JList <Persona> List_Eliminar;
 	private static DefaultListModel <Persona> dlmodel_pers;
 	
-	public PanelEliminarPersonas(ArrayList <Persona> Persona_Eliminar ) {
+	public PanelEliminarPersonas( ) {//ArrayList <Persona> Persona_Eliminar
 		setLayout(null);
 		
 		JLabel lblPanelElim = new JLabel("Eliminar Usuario");
@@ -37,7 +37,7 @@ public class PanelEliminarPersonas extends JPanel {
 		
 		dlmodel_pers = new DefaultListModel <Persona> (); 
 		
-		CargarList(Persona_Eliminar);
+		//CargarList(Persona_Eliminar);
 		
 	}
 	

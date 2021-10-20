@@ -4,10 +4,15 @@ import presentacion.vista.VentanaPrincipal;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.awt.event.KeyAdapter;
+
 
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
 
 import entidades.Persona;
 import negocio.PersonaNegocio;
@@ -17,7 +22,8 @@ import presentacion.vista.PanelEliminarPersonas;
 import presentacion.vista.PanelListarPersonas;
 
 
-public class Controlador implements ActionListener{
+public class Controlador implements ActionListener, KeyListener{
+
 
 	private VentanaPrincipal ventanaPrincipal;
 	private PanelAgregarPersonas pnlAgregarPersonas;
@@ -27,6 +33,7 @@ public class Controlador implements ActionListener{
 	
 	private PersonaNegocio pNegocio;
 	private ArrayList<Persona> tablaPersonas;
+	private KeyEvent s;
 	//private static DefaultListModel<Persona> dlmodel;
 	
 	
@@ -37,8 +44,8 @@ public class Controlador implements ActionListener{
 	this.pNegocio = pNegocio;
 	
 	this.pnlAgregarPersonas = new PanelAgregarPersonas();
-	this.pnlModificarPersona = new PanelModificarPersona();
-	this.pnlEliminarPersonas = new PanelEliminarPersonas((ArrayList<Persona>) pNegocio.readAll());
+	this.pnlModificarPersona = new PanelModificarPersona();//(ArrayList<Persona>) pNegocio.readAll()
+	this.pnlEliminarPersonas = new PanelEliminarPersonas();//(ArrayList<Persona>) pNegocio.readAll()
 	this.pnlListarPersonas = new PanelListarPersonas();
 	
 	//Eventos menu del Frame principal llamado Ventana
@@ -52,12 +59,48 @@ public class Controlador implements ActionListener{
 	this.pnlAgregarPersonas.getBtnAgregarPersona().addActionListener(a-> EventoClick_AgregarPersonas(a));
 	
 	//Eventos PanelModificarPersona
-	
+	this.pnlModificarPersona.getListaPersonas().addListSelectionListener(a -> EventoSeleccionarPersona(a));
+	this.pnlModificarPersona.getBtnModificarPersona().addActionListener(s -> EventoClick_ModificarPersona(s));
+	//this.pnlModificarPersona.getTxfApellido().addKeyListener(null);
 	//Eventos PanelEliminarPersonas
 	this.pnlEliminarPersonas.getBtnEliminar().addActionListener(s->EventoClickBoton_BorrarPersona(s));
 	
 	//Eventos PanelListarPersonas
 	
+	}
+	
+
+	
+	private void EventoClick_ModificarPersona(ActionEvent actEvent) {
+		
+		
+		Persona mod_persona = new Persona();
+		mod_persona.setDni(pnlModificarPersona.getTxfDni().getText());
+		mod_persona.setApellido(pnlModificarPersona.getTxfApellido().getText());
+		mod_persona.setNombre(pnlModificarPersona.getTxfNombre().getText());
+		int devuelve = pNegocio.update(mod_persona);
+		if(devuelve == 1) {
+			JOptionPane.showMessageDialog(null, "Se modifico correctamente", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+			pnlModificarPersona.setTxfNombre("");
+			pnlModificarPersona.setTxfApellido("");
+			pnlModificarPersona.setTxfDni("");
+			//pnlModificarPersona.getListaPersonas().clearSelection();
+			actualizarTabla_Modificar();
+			
+		}else if(devuelve == -1) {
+			JOptionPane.showMessageDialog(null, "No pudo modificarse", "Error", JOptionPane.WARNING_MESSAGE);
+		}else JOptionPane.showMessageDialog(null, "Los campos ingresados son incorrectos", "Error", JOptionPane.WARNING_MESSAGE);
+		
+	}
+	
+	private void EventoSeleccionarPersona(ListSelectionEvent actEvent) {
+		int valor = pnlModificarPersona.getListaPersonas().getSelectedIndex();
+		Persona mod_persona = new Persona();
+		mod_persona = pnlModificarPersona.getListaPersonas().getModel().getElementAt(valor);
+		
+		pnlModificarPersona.setTxfNombre(mod_persona.getNombre());
+		pnlModificarPersona.setTxfApellido(mod_persona.getApellido());
+		pnlModificarPersona.setTxfDni(mod_persona.getDni());
 	}
 	
 	private void EventoClick_AgregarPersonas(ActionEvent actEvent) {
@@ -79,11 +122,11 @@ public class Controlador implements ActionListener{
 		}
 		else if (estadoInsert == -1){
 			mensajeOutput = "El DNI ya se encuentra registrado";
-		}
+		}else mensajeOutput = "Error al agregar la persona";
 	
 		// Se muestra el mensaje
 		this.pnlAgregarPersonas.mostrarMensaje(mensajeOutput);
-		this.actualizarTabla();
+		this.actualizarTabla_Eliminar();
 		
 	}
 	
@@ -94,8 +137,8 @@ public class Controlador implements ActionListener{
 			if(!pNegocio.delete((Persona)pnlEliminarPersonas.getList_Eliminar().getModel().getElementAt(valor))) {
 				JOptionPane.showMessageDialog(null, "No pudo eliminarse", "Error", JOptionPane.WARNING_MESSAGE);
 			}
-			this.actualizarTabla();
-			JOptionPane.showMessageDialog(null, "Se elimino correctamente", "Aviso", JOptionPane.WARNING_MESSAGE);
+			this.actualizarTabla_Eliminar();
+			JOptionPane.showMessageDialog(null, "Se elimino correctamente", "Aviso", JOptionPane.INFORMATION_MESSAGE);
 		}else {
 			JOptionPane.showMessageDialog(null, "No pudo eliminarse", "Error", JOptionPane.WARNING_MESSAGE);
 		}
@@ -113,10 +156,15 @@ public class Controlador implements ActionListener{
 	}
 	public void EventoClickMenu_AbrirPanel_ModificarPersona(ActionEvent a)
 	{
+		pnlModificarPersona.setTxfNombre("");
+		pnlModificarPersona.setTxfApellido("");
+		pnlModificarPersona.setTxfDni("");
 		ventanaPrincipal.getContentPane().removeAll();
 		ventanaPrincipal.getContentPane().add(pnlModificarPersona);
 		ventanaPrincipal.getContentPane().repaint();
 		ventanaPrincipal.getContentPane().revalidate();
+		
+		this.actualizarTabla_Modificar();
 	}
 	public void EventoClickMenu_AbrirPanel_EliminarPersona(ActionEvent a)
 	{
@@ -127,7 +175,7 @@ public class Controlador implements ActionListener{
 		ventanaPrincipal.getContentPane().repaint();
 		
 		ventanaPrincipal.getContentPane().revalidate();
-		this.actualizarTabla();
+		this.actualizarTabla_Eliminar();
 	}
 	public void EventoClickMenu_AbrirPanel_ListarPersonas(ActionEvent a)
 	{
@@ -144,15 +192,46 @@ public class Controlador implements ActionListener{
 	}
 
 
-	private void actualizarTabla() {
+	private void actualizarTabla_Eliminar() {
 		
 		this.tablaPersonas = (ArrayList<Persona>) pNegocio.readAll();
 		this.pnlEliminarPersonas.CargarList(tablaPersonas);
+	}
+	
+	private void actualizarTabla_Modificar() {
+		
+		this.tablaPersonas = (ArrayList<Persona>) pNegocio.readAll();
+		try {
+		this.pnlModificarPersona.CargarList(tablaPersonas);
+		
+		}catch(Exception e) {
+
+		}
+
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
+		// TODO Auto-generated method stub
+
 		
 	}
 	
