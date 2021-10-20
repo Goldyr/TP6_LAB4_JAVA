@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 
 import entidades.Persona;
 import negocio.PersonaNegocio;
@@ -87,8 +88,18 @@ public class Controlador implements ActionListener{
 	}
 	
 	private void EventoClickBoton_BorrarPersona(ActionEvent act) {
-		
-		
+
+		int valor = pnlEliminarPersonas.getList_Eliminar().getSelectedIndex();
+		if(valor >= 0) {
+			if(!pNegocio.delete((Persona)pnlEliminarPersonas.getList_Eliminar().getModel().getElementAt(valor))) {
+				JOptionPane.showMessageDialog(null, "No pudo eliminarse", "Error", JOptionPane.WARNING_MESSAGE);
+			}
+			this.actualizarTabla();
+			JOptionPane.showMessageDialog(null, "Se elimino correctamente", "Aviso", JOptionPane.WARNING_MESSAGE);
+		}else {
+			JOptionPane.showMessageDialog(null, "No pudo eliminarse", "Error", JOptionPane.WARNING_MESSAGE);
+		}
+			
 	}
 	
 	public void EventoClickMenu_AbrirPanel_AgregarPersona(ActionEvent a)

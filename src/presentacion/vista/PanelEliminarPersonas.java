@@ -27,7 +27,7 @@ public class PanelEliminarPersonas extends JPanel {
 		lblPanelElim.setBounds(107, 29, 105, 14);
 		add(lblPanelElim);
 		
-		List_Eliminar = new JList();
+		List_Eliminar = new JList <Persona> ();
 		List_Eliminar.setBounds(107, 54, 238, 185);
 		add(List_Eliminar);
 		
@@ -35,17 +35,18 @@ public class PanelEliminarPersonas extends JPanel {
 		btnEliminar.setBounds(157, 250, 134, 28);
 		add(btnEliminar);
 		
+		dlmodel_pers = new DefaultListModel <Persona> (); 
+		
 		CargarList(Persona_Eliminar);
 		
 	}
 	
-	public void CargarList(ArrayList <Persona> Persona_Eliminar ) {
+	public void CargarList(ArrayList <Persona> Persona_Eliminar) {
 		
+		dlmodel_pers.clear();
 		
 		for(Persona a : Persona_Eliminar) {
-			
 			dlmodel_pers.addElement(a);
-			
 		}
 		
 		List_Eliminar.setModel(dlmodel_pers);
