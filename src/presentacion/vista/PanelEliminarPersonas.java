@@ -50,7 +50,6 @@ public class PanelEliminarPersonas extends JPanel {
 		}
 		
 		List_Eliminar.setModel(dlmodel_pers);
-		
 	}
 
 	public JButton getBtnEliminar() {

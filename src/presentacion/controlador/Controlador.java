@@ -27,6 +27,7 @@ public class Controlador implements ActionListener{
 	
 	private PersonaNegocio pNegocio;
 	private ArrayList<Persona> tablaPersonas;
+	
 	//private static DefaultListModel<Persona> dlmodel;
 	
 	
@@ -118,6 +119,7 @@ public class Controlador implements ActionListener{
 		ventanaPrincipal.getContentPane().repaint();
 		ventanaPrincipal.getContentPane().revalidate();
 	}
+	
 	public void EventoClickMenu_AbrirPanel_EliminarPersona(ActionEvent a)
 	{
 		ventanaPrincipal.getContentPane().removeAll();
@@ -129,12 +131,14 @@ public class Controlador implements ActionListener{
 		ventanaPrincipal.getContentPane().revalidate();
 		this.actualizarTabla();
 	}
+	
 	public void EventoClickMenu_AbrirPanel_ListarPersonas(ActionEvent a)
 	{
 		ventanaPrincipal.getContentPane().removeAll();
 		ventanaPrincipal.getContentPane().add(pnlListarPersonas);
 		ventanaPrincipal.getContentPane().repaint();
 		ventanaPrincipal.getContentPane().revalidate();
+		this.actualizarTabla_Listado();
 	}
 	
 	
@@ -149,6 +153,12 @@ public class Controlador implements ActionListener{
 		this.tablaPersonas = (ArrayList<Persona>) pNegocio.readAll();
 		this.pnlEliminarPersonas.CargarList(tablaPersonas);
 	}
+	
+	private void actualizarTabla_Listado() {
+		
+		this.pnlListarPersonas.llenarTabla(pNegocio.readAll());
+	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
