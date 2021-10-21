@@ -1,6 +1,7 @@
 package presentacion.vista;
 
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import entidades.Persona;
 import presentacion.controlador.Controlador;
@@ -20,8 +21,12 @@ public class PanelEliminarPersonas extends JPanel {
 	private JList <Persona> List_Eliminar;
 	private static DefaultListModel <Persona> dlmodel_pers;
 	
-	public PanelEliminarPersonas(ArrayList <Persona> Persona_Eliminar ) {
+	public PanelEliminarPersonas( ) {//ArrayList <Persona> Persona_Eliminar
 		setLayout(null);
+		
+		JScrollPane spPersonas = new JScrollPane();
+        spPersonas.setBounds(15, 30, 383, 126);
+        add(spPersonas);
 		
 		JLabel lblPanelElim = new JLabel("Eliminar Usuario");
 		lblPanelElim.setBounds(107, 29, 105, 14);
@@ -37,8 +42,8 @@ public class PanelEliminarPersonas extends JPanel {
 		
 		dlmodel_pers = new DefaultListModel <Persona> (); 
 		
-		CargarList(Persona_Eliminar);
-		
+        spPersonas.setViewportView(List_Eliminar);
+
 	}
 	
 	public void CargarList(ArrayList <Persona> Persona_Eliminar) {
